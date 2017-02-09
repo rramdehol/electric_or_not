@@ -4,6 +4,15 @@ var router = express.Router();
 var config = require("../config/config.js")
 // Include mysql
 var mysql = require('mysql')
+// We will need the fs module to read file
+var fs = require('fs');
+// Include multer
+var multer = require('multer');
+// We will specify the type to use later
+var upload = multer({
+	dest:'public/images'
+})
+var type = upload.single('imageToUpload')
 // Setup a connection variable 
 var connection = mysql.createConnection({
 	host:config.host,
@@ -74,6 +83,46 @@ router.get('/standing', function(req, res, next) {
  		res.json(results)
  	})
  })
-
-
+router.get('/uploadImage',(req,res,next)=>{
+	res.render('uploadImage',{})
+})
+router.post('/formSubmit',type,(req,res,next)=>{
+	var tmpPath = req.file.path;
+	// Setup the target path plus the original name of the file
+	var targetPath = 'public/images/'+req.file.originalname;
+	// Use the fs module to read the file then write it to the correct place
+	fs.readFile(req.file,(error, fileContents)=>{
+		fs.writeFile(targetPath, fileContents, (error)=>{
+			if(error) throw error;
+			var insertQuery = "INSERT INTO images (imageUrl) VALUE (?)"
+			connection.query(insertQuery,[req.file.originalName],(error, results, fields)=>{
+				if(error) throw error;
+				res.redirect('/?file=uploaded')
+			})
+		})
+	});
+})
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
