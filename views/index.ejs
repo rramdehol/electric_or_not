@@ -13,11 +13,11 @@
 <body>
 	<h1>Electric or Not!</h1>
 	<div class="container">
-		<div class="row">
+		<div class="row text-center">
 			<img class="image" src=<%=imageToRender%> alt="">
 			<div class="col-sm-12">
-				<a href="/vote/down/"+<%=imageID%> title=""><button class="btn btn-danger">No</button></a>
-				<a href="/vote/up/"+<%=imageID%> title=""><button class="btn btn-success">Yes</button></a>
+				<a href="/vote/down/<%=imageID%>" title=""><button class="btn btn-danger">No</button></a>
+				<a href="/vote/up/<%=imageID%>" title=""><button class="btn btn-success">Yes</button></a>
 			</div>
 		</div>
 	</div>
